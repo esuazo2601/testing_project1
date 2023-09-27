@@ -1,7 +1,6 @@
 import sys
 import os
 from datetime import timedelta
-from dotenv import load_dotenv
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../data_base')))
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
