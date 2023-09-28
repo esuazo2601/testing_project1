@@ -20,15 +20,16 @@ def test_register_user_valid(client):
     response = client.post('/register', json=data)
 
     # Verifica que la respuesta tenga un código de estado 200
-    assert response.status_code == 200
 
     # Verifica que la respuesta tenga el formato JSON esperado
-    data = response.get_json()
-    
-    # Accede al primer elemento de la lista y verifica si 'name' está en ese diccionario
-    assert data["name"] == "Estebandidox"
-    assert data["password"] == "password123"
-    assert data["email"] == "esteban21312312321@example.com"
+    returned = response.get_json()
+
+    # Verifica que los datos en el diccionario sean correctos
+    assert "name" in returned
+    assert returned["name"]== "Estebandidox"
+    assert "email" in returned
+    assert returned["email"] == "esteban21312312321@example.com"
+    assert response.status_code == 200
 
 def test_register_user_missing_parameters(client):
     # Define datos de prueba con parámetros faltantes
@@ -42,7 +43,7 @@ def test_register_user_missing_parameters(client):
     response = client.post('/register', json=data)
 
     # Verifica que la respuesta tenga un código de estado 200 (porque es un error lógico en la aplicación)
-    assert response.status_code == 200
+    assert response.status_code == 400
 
     # Verifica que la respuesta contenga un mensaje de error
     data = response.get_json()
