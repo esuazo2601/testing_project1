@@ -49,3 +49,12 @@ def test_register_user_missing_parameters(client):
     data = response.get_json()
     assert "error" in data
     assert data["error"] == "Parámetros faltantes"
+
+def test_create_software(client):
+    data = {
+        "name": "Postman"
+    }
+    response = client.post("/software", json=data)
+    returned = response.get_json()
+    assert returned['message'] == "Software creado"
+    assert response.status_code == 200
