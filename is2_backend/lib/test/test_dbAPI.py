@@ -83,3 +83,23 @@ def test_create_report(client):
     assert response.status_code == 200
     returned = response.get_json()
     assert returned['message'] == "Reporte creado"
+
+#Test para incluir un comentario en un reporte
+def test_post_comment(client):
+    user = client.get("/users/esteban21312312321@example.com")
+    returned = user.get_json()
+    returned_id = returned['id']
+    returned_name = returned['name']
+    data = {
+        "content" : "Estoy creando un comentario en mi reporte",
+        "report_id" : 1,
+        "commenter_id" : returned_id,
+        "commenter_name" : returned_name
+    }
+    response = client.post("/comments", json=data)
+    assert response.status_code == 200
+    returned = response.get_json()
+    assert returned['message'] == "Comentario creado"
+
+#Test para recuperar el comentario ingresado
+#
