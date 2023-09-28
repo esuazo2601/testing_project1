@@ -1,13 +1,14 @@
 import sys
 import os
 from datetime import timedelta
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../data_base')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
-from config import ApplicationConfig
+from api.config import ApplicationConfig
 from flask_cors import CORS,  cross_origin
 from flask import Flask, jsonify, request, make_response, abort, session
-from dbmaker import db, User, Developer, Report, Software, Comment, app, Admin, software_dev, Notification, Reassignation
+from data_base.dbmaker import db, User, Developer, Report, Software, Comment, app, Admin, software_dev, Notification, Reassignation
 from sqlalchemy import text
 from werkzeug.utils import secure_filename
 from sqlalchemy.orm.exc import NoResultFound
@@ -50,6 +51,8 @@ def register_user():
     email = request.json["email"]
     password = request.json["password"]
 
+    if name == "" or email == "" or password == "":
+        return jsonify ({'error':"Parámetros faltantes"})
     user_exists = User.query.filter_by(email=email).first() is not None
     if user_exists:
         return jsonify({'error': "ya existe usuario xd"},409) 
@@ -174,12 +177,15 @@ def update_user(id):
     db.session.commit()
     return jsonify({'message': 'Usuario actualizado'})
 
-@app.route('/users/<email>', methods=['DELETE' ])
+@app.route('/users/<email>', methods=['DELETE'])
 def delete_user(email):
-    user = User.query.filter_by(email).first()
-    db.session.delete(user)
-    db.session.commit()
-    return jsonify({'message': 'Usuario eliminado'})
+    user = User.query.filter_by(email=email).first()
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({'message': 'Usuario eliminado'})
+    else:
+        return jsonify({'message': 'Usuario no encontrado'}), 404
 
 ####################################DEVELOPER###################################
 @app.route('/devs/<id>', methods=['GET' ])

@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from dataclasses import dataclass
-from config import ApplicationConfig
+from api.config import ApplicationConfig
 from uuid import uuid4
 
 def get_uuid():
