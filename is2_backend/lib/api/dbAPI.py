@@ -47,24 +47,29 @@ def _build_cors_preflight_response():
 
 @app.route ('/register', methods=['POST'])
 def register_user():
-    name = request.json["name"]
-    email = request.json["email"]
-    password = request.json["password"]
+    data = request.json  # Obtener los datos JSON de la solicitud
 
-    if name == "" or email == "" or password == "":
-        return jsonify ({'error':"Parámetros faltantes"})
-    user_exists = User.query.filter_by(email=email).first() is not None
+    name = data.get("name")
+    email = data.get("email")
+    password = data.get("password")
+
+    if name is None or email is None or password is None or name == "" or password == "":
+        return jsonify({'error': "Parámetros faltantes"}), 400
+
+    user_exists = User.query.filter_by(email=email).first()
     if user_exists:
-        return jsonify({'error': "ya existe usuario xd"},409) 
-    hashed_password = bcrypt.generate_password_hash(password)
-    new_user = User(name=name, email = email, password = hashed_password, type_of_user = 'user')
+        return jsonify({'error': "El usuario ya existe"}, 409)
+
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    new_user = User(name=name, email=email, password=hashed_password, type_of_user='user')
     db.session.add(new_user)
     db.session.commit()
-    return jsonify ({
-        "name":new_user.name,
-        "id":new_user.id,
-        "email":new_user.email,
-    },200)
+
+    return jsonify({
+        "name": new_user.name,
+        "email": new_user.email
+    }), 200
+
 
 @app.route ('/login', methods = ['POST'])
 def login():
@@ -104,14 +109,20 @@ def get_current_user():
 
 ######################################USER######################################
 
-@app.route('/users/<id>', methods=['GET'])
-def get_user(id):
-    user = User.query.get_or_404(id)
-    user_data = {}
-    user_data['id'] = user.id
-    user_data['name'] = user.name
-    user_data['email'] = user.email
-    return jsonify({'user': user_data})
+@app.route('/users/<email>', methods=['GET'])
+def get_user(email):
+    user = User.query.filter_by(email=email).first()
+    if user is None:
+        abort(404, description="Usuario no encontrado")
+    
+    user_data = {
+        'id': user.id,
+        'name': user.name,
+        'email': user.email
+    }
+    return jsonify({'id': user_data['id'],
+                    'name': user_data['name'],
+                    'email': user_data['email']})
 
 @app.route('/users', methods=['GET'])
 def get_users():
@@ -389,7 +400,7 @@ def create_report():
         dev_id = request.json['dev_id']
         dev_name = request.json['dev_name']
         dev_email = request.json['dev_email']
-        software = request.json['software']
+        #software = request.json['software']
         software_name = request.json['software_name']
         urgency = request.json['urgency']
         status = request.json['status']
@@ -418,7 +429,7 @@ def create_report():
                     dev_id=dev_id,
                     dev_name=dev_name,
                     dev_email=dev_email,
-                    software=software,
+
                     software_name=software_name,
                     urgency=urgency,
                     status=status,
@@ -435,7 +446,6 @@ def create_report():
                 dev_id=dev_id,
                 dev_name=dev_name,
                 dev_email=dev_email,
-                software=software,
                 software_name=software_name,
                 urgency=urgency,
                 status=status
@@ -701,8 +711,6 @@ def get_software_dev_names():
         software_dev_list.append(software_dev_dict)
 
     return jsonify({'software_dev': software_dev_list})
-
-
 
 @app.route('/software_dev/associate',methods=['POST'])
 def associate_software_dev():
