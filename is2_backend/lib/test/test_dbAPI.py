@@ -58,3 +58,28 @@ def test_create_software(client):
     returned = response.get_json()
     assert returned['message'] == "Software creado"
     assert response.status_code == 200
+
+def test_create_report(client):
+    user = client.get("/users/esteban21312312321@example.com")
+    returned = user.get_json()
+    returned_id = returned['id']
+    returned_name = returned['name']
+
+    data = {
+        "title" : "No pasan mis test",        
+        "description" : "Los test no estan pasando",
+        "user_id" : returned_id,
+        "user_name" : returned_name,
+        "user_email" : "esteban21312312321@example.com",
+        "dev_id" : None,
+        "dev_name" : None,
+        "dev_email" : None,    
+        "software_name" : "Postman",
+        "urgency" : 1,
+        "status" : "ToDo"
+    }
+
+    response = client.post("/reports", json = data)
+    assert response.status_code == 200
+    returned = response.get_json()
+    assert returned['message'] == "Reporte creado"
