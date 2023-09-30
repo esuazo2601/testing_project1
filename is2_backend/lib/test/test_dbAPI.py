@@ -138,3 +138,16 @@ def test_assign_dev_to_software(client):
     returned = sof_append.get_json()
     assert returned['software'] == "Flask"
     assert returned['developer'] == "soydev"
+
+def test_create_developer(client):
+    data = {
+        "name": "nombreDesarrollador",
+        "email": "desarrollador@example.com",
+        "password": "Holis123"
+    }
+
+    response = client.post('/devs', json=data)
+    returned = response.get_json()
+
+    assert response.status_code == 200
+    assert returned["message"] == "Developer creado"
