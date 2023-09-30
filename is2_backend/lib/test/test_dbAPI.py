@@ -1,6 +1,5 @@
 import pytest
 from flask import Flask
-from api.dbAPI import app
 from api.dbAPI import *
 from data_base.dbmaker import *
 
@@ -9,6 +8,7 @@ def client():
     # Crea un cliente de prueba para realizar solicitudes HTTP
     with app.test_client() as client:
         yield client
+
 
 def test_register_user_valid(client):
     # Define los datos de prueba para el registro
@@ -157,4 +157,48 @@ def test_get_softwares(client):
     data = client.get("/software")
     returned = data.get_json()
     assert returned[1] == 'Postman' or 'Flask'
+
+def test_update_report(client):
+    user_response = client.get("/users/esteban21312312321@example.com")
+    user_data = user_response.get_json()
+
+    report_data = {
+        "title": "Reporte de ejemplo",
+        "description": "Descripción del reporte de ejemplo",
+        "user_id": user_data["id"],
+        "user_name": user_data["name"],
+        "user_email": user_data["email"],
+        "dev_id": None,
+        "dev_name": None,
+        "dev_email": None,
+        "software_name": "Postman",
+        "software":1,
+        "urgency": 1,
+        "status": "ToDo"
+    }
+
+    report_response = client.post("/reports", json=report_data)
+    report_id = report_response.get_json()['id']
+
+    updated_report_data = {
+        "title": "Reporte de ejemplo cambiado",
+        "description": "Descripción del reporte actualizado",
+        "user_id": user_data["id"],
+        "user_name": user_data["name"],
+        "user_email": user_data["email"],
+        "dev_id": None,
+        "dev_name": None,
+        "dev_email": None,
+        "software_name": "Postman",
+        "software":1,
+        "urgency": 5,
+        "status": "InProgress"
+    }
+
+    response = client.put(f'/reports/{report_id}', json=updated_report_data)
+
+    assert response.status_code == 200
+    returned = response.get_json()
+    assert returned["message"] == "Reporte actualizado"
+
 

@@ -429,7 +429,6 @@ def create_report():
                     dev_id=dev_id,
                     dev_name=dev_name,
                     dev_email=dev_email,
-
                     software_name=software_name,
                     urgency=urgency,
                     status=status,
@@ -453,7 +452,7 @@ def create_report():
 
         db.session.add(new_report)
         db.session.commit()
-        return jsonify({'message':'Reporte creado'})
+        return jsonify({'message': 'Reporte creado', 'id': new_report.id})
     else:
         raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
 
