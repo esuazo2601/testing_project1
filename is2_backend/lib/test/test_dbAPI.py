@@ -102,4 +102,16 @@ def test_post_comment(client):
     assert returned['message'] == "Comentario creado"
 
 #Test para recuperar el comentario ingresado
-#
+def test_get_comment_from_report(client):
+    user = client.get("/users/esteban21312312321@example.com")
+    returned = user.get_json()
+    returned_id = returned['id']
+    returned_name = returned['name']
+    
+    response = client.get("/comments_in/1")
+    assert response.status_code == 200
+    returned = response.get_json()
+    assert returned[0]['commenter_id'] == returned_id
+    assert returned[0]['commenter_name'] == returned_name
+    assert returned[0]['content'] == "Estoy creando un comentario en mi reporte"
+    
