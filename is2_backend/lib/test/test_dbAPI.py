@@ -151,3 +151,9 @@ def test_create_developer(client):
 
     assert response.status_code == 200
     assert returned["message"] == "Developer creado"
+
+def test_get_softwares(client):
+    data = client.get("/software")
+    returned = data.get_json()
+    assert returned[1] == 'Postman' or 'Flask'
+
