@@ -139,18 +139,19 @@ def test_assign_dev_to_software(client):
     assert returned['software'] == "Flask"
     assert returned['developer'] == "soydev"
 
-def test_create_developer(client):
-    data = {
-        "name": "nombreDesarrollador",
-        "email": "desarrollador@example.com",
-        "password": "Holis123"
-    }
-
-    response = client.post('/devs', json=data)
-    returned = response.get_json()
-
-    assert response.status_code == 200
-    assert returned["message"] == "Developer creado"
+def test_get_software_dev_names(client):
+    data = client.get("/software_dev_names")
+    assert data.status_code == 200
+    ret = data.get_json()
+    
+    # Accede primero al diccionario "software_dev"
+    software_dev = ret["software_dev"]
+    
+    # Ahora, puedes acceder al primer elemento de la lista
+    software_devs = software_dev[0]
+    
+    assert software_devs["developer_name"] == "soydev"
+    assert software_devs["software_name"] == "Flask"
 
 def test_get_softwares(client):
     data = client.get("/software")
