@@ -2,11 +2,11 @@
 
 ## Dependencias
 Las dependencias necesarias para ejecutar el proyecto de Flask son las siguientes:
-- flask, flask-cors, flask-migrate, flask-bcrypt 
+- flask, flask-cors, flask-migrate, flask-bcrypt, flaks-sqlAlchemy
 Pueden ser instalados de la siguiente forma en un entorno virutal o sobre una terminal normal:
 
 ```
-pip install flask flask-cors flask-migrate flask-bcrypt
+pip install flask flask-cors flask-migrate flask-bcrypt flask-sqlAlchemy
 ```
 ## Ejecutando los test
 - Los test fueron implementados con pytest, por lo que debe ser instalado de antemano.

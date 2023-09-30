@@ -1,6 +1,8 @@
 import pytest
-from flask import jsonify
+from flask import Flask
 from api.dbAPI import app
+from api.dbAPI import *
+from data_base.dbmaker import *
 
 @pytest.fixture
 def client():
@@ -18,9 +20,6 @@ def test_register_user_valid(client):
 
     # Realiza una solicitud POST a la ruta /register con los datos de prueba
     response = client.post('/register', json=data)
-
-    # Verifica que la respuesta tenga un código de estado 200
-
     # Verifica que la respuesta tenga el formato JSON esperado
     returned = response.get_json()
 
@@ -115,3 +114,27 @@ def test_get_comment_from_report(client):
     assert returned[0]['commenter_name'] == returned_name
     assert returned[0]['content'] == "Estoy creando un comentario en mi reporte"
     
+def test_assign_dev_to_software(client):
+    #Se crea un dev
+    dev_data = {
+        "name":"soydev",
+        "email":"soydev@soydev.cl",
+        "password":"123"
+    }
+    dev = client.post("/devs",json = dev_data)
+    #assert dev.status_code == 200
+    #se crea un software
+    software_data = {
+        "name":"Flask"
+    }
+    sof = client.post("/software",json=software_data)
+    assert sof.status_code == 200
+    #Se asigna al software de Flask creado anteriormente
+    sof_dev_data = {
+        "id":"2",
+        "email":"soydev@soydev.cl"
+    }
+    sof_append = client.put("/software/append",json = sof_dev_data)
+    returned = sof_append.get_json()
+    assert returned['software'] == "Flask"
+    assert returned['developer'] == "soydev"

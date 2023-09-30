@@ -623,7 +623,7 @@ def get_comment_in(report_id):
         comment_data = {}
         comment_data['id'] = comment.id
         comment_data['content'] = comment.content
-       # comment_data['date'] = comment.date
+        # comment_data['date'] = comment.date
         comment_data['report_id'] = comment.report_id
         comment_data['commenter_id'] = comment.commenter_id
         comment_data['commenter_name'] = comment.commenter_name
