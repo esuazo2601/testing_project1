@@ -199,9 +199,9 @@ def delete_user(email):
         return jsonify({'message': 'Usuario no encontrado'}), 404
 
 ####################################DEVELOPER###################################
-@app.route('/devs/<id>', methods=['GET' ])
-def get_dev(id):
-    dev = Developer.query.get_or_404(id)
+@app.route('/devs/<email>', methods=['GET' ])
+def get_dev(email):
+    dev = Developer.query.get_or_404(email)
     dev_data = {}
     dev_data['id'] = dev.id
     dev_data['name'] = dev.name

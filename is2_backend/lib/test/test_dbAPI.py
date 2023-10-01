@@ -139,6 +139,20 @@ def test_assign_dev_to_software(client):
     assert returned['software'] == "Flask"
     assert returned['developer'] == "soydev"
 
+def test_update_report_dev(client):
+    dev_data = {
+        "name" : "nuevodev",
+        "email" : "nuevodev@dev.cl",
+        "password" : "1234"
+    }
+    dev = client.post("/devs", json = dev_data)
+    update_report = client.patch('/reports/1/update_dev/nuevodev@dev.cl')
+    assert update_report.status_code == 200
+    post = client.get("/reports/1")
+    returned = post.get_json()
+    assert returned['report']['dev_email'] == "nuevodev@dev.cl"
+    assert returned['report']['dev_name'] == "nuevodev"
+
 def test_get_software_dev_names(client):
     data = client.get("/software_dev_names")
     assert data.status_code == 200
