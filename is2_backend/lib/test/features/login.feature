@@ -2,7 +2,7 @@ Feature: Login
     Puedo iniciar sesion
 
     Scenario: Inicio sesion
-        Given Soy un usuario registrado
+        Given Tengo mis credenciales de usuario
         And Me sé mis datos para inciar sesión
 
         When Ingreso mis datos
