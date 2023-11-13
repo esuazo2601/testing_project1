@@ -34,14 +34,6 @@ def _build_cors_preflight_response():
     response.headers.add('Access-Control-Allow-Methods', "http://localhost:3000")
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
-# CORS(app,resources={
-#     r"/users/*":{"origins":"http://localhost"},
-#     r"/devs/*":{"origins":"http://localhost"},
-#     r"/reports/*":{"origins":"http://localhost"},
-#     r"/software/*":{"origins":"http://localhost"},
-#     r"/dev_reports/*":{"origins":"http://localhost"},
-#     r"/user_reports/*":{"origins":"http://localhost"}
-#     })
 
 ######################################SESSION ROUTES######################################
 

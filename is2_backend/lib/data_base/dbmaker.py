@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from dataclasses import dataclass
-from api.config import ApplicationConfig
+#from api.config import ApplicationConfig
 from uuid import uuid4
 
 def get_uuid():
@@ -13,9 +13,8 @@ def get_uuid():
 sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../api')))
 
-
 app = Flask(__name__)
-app.config.from_object(ApplicationConfig)
+#app.config.from_object(ApplicationConfig)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
 db = SQLAlchemy(app)
 
@@ -121,6 +120,6 @@ class Reassignation(db.Model):
     dev_email = db.Column (db.String(80), db.ForeignKey('user.email'), nullable=False)
     date = db.Column (db.DateTime, default=datetime.utcnow)
 
-with app.app_context():
-    db.create_all()
+#with app.app_context():
+#   db.create_all() 
     
