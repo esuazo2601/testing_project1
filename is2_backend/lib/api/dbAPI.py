@@ -177,16 +177,25 @@ def create_user_from_json():
     return jsonify({'message': 'Usuarios creados exitosamente'}), 201
 
 
+# @app.route('/users/<id>', methods=['PUT'])
+# def update_user(id):
+#     user = User.query.get_or_404(id)
+#     name = request.json['name']
+#     email = request.json['email']
+#     user.name = name
+#     user.email = email
+#     db.session.commit()
+#     return jsonify({'message': 'Usuario actualizado'})
 
-@app.route('/users/<id>', methods=['PUT'])
-def update_user(id):
-    user = User.query.get_or_404(id)
-    name = request.json['name']
-    email = request.json['email']
-    user.name = name
-    user.email = email
+@app.route('/users/<email>', methods=['PUT'])
+def update_user_by_email(email):
+    user = User.query.filter_by(email=email).first_or_404(description="Usuario no encontrado")
+    data = request.json
+    user.name = data.get('name', user.name)  
+    user.email = data.get('email', user.email)  
     db.session.commit()
     return jsonify({'message': 'Usuario actualizado'})
+
 
 @app.route('/users/<email>', methods=['DELETE'])
 def delete_user(email):
