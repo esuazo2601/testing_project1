@@ -1,4 +1,4 @@
-# Proyecto de testeo Backend en Flask de Is2-2023
+# Proyecto de pruebas de aceptación Backend en Flask de Is2-2023
 # Proyecto de testeo realizado por:
 - Elizabeth Bravo Campos
 - Gustavo Gonzalez Gutierrez
@@ -21,9 +21,8 @@ flask --app dbAPI run
 ```
 ## Ejecutando los test
 - Los test fueron implementados con pytest, por lo que debe ser instalado de antemano.
-- Para ser ejecutados se debe posicionar en la carpeta is2_backend con el servidor de Flask corriendo en otra terminal
-y ejecutando:
+- Para ser ejecutados se debe posicionar en la carpeta is2_backend/lib y ejecutar:
 
 ```
-pytest 
+python -m pytest 
 ```
